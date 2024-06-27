@@ -35,7 +35,6 @@
 
     <build>
         <plugins>
-            <!-- Maven Compiler Plugin to compile the project -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -45,8 +44,6 @@
                     <target>17</target>
                 </configuration>
             </plugin>
-
-            <!-- Maven Surefire Plugin to execute tests -->
         </plugins>
     </build>
 </project>

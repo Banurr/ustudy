@@ -1,8 +1,10 @@
 package org.example;
 
+import org.example.exceptions.InvalidIndexException;
 import org.example.models.Book;
 import org.example.service.BookService;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -35,8 +37,10 @@ public class App
 
             else if(option.equals("1")) showAllBooks();
 
-            else if(option.equals("2")) addNewBook();
-
+            else if(option.equals("2"))
+            {
+                addNewBook();
+            }
             else if(option.equals("3")) deleteBook();
 
             else if(option.equals("4")) findBook();
@@ -74,9 +78,20 @@ public class App
 
         String author = sc.nextLine();
 
-        System.out.println("Enter date of publication in the format yyyy-mm-dd");
+        LocalDate date = null;
 
-        LocalDate date = LocalDate.parse(sc.nextLine());
+        while (date == null)
+        {
+            System.out.println("Enter date of publication in the format yyyy-mm-dd");
+            try
+            {
+                date = LocalDate.parse(sc.nextLine());
+            }
+            catch (DateTimeParseException e)
+            {
+                System.out.println("Invalid date format");
+            }
+        }
 
         System.out.println("Enter ISBN of the book");
 
@@ -85,6 +100,7 @@ public class App
         BookService.addBook(new Book(name,author,date,ISBN));
 
         System.out.println("Book was added successfully");
+
 
     }
 
@@ -105,11 +121,26 @@ public class App
         {
             System.out.println(i + " - " + books.get(i));
         }
-        int index = Integer.parseInt(sc.nextLine());
 
-        BookService.deleteBook(index);
+        while(true)
+        {
+            try
+            {
+                int index = Integer.parseInt(sc.nextLine());
+                BookService.deleteBook(index);
+                System.out.println("Book was deleted successfully");
+                break;
+            }
+            catch (InvalidIndexException exception)
+            {
+                System.out.println("Enter valid index");
+            }
+            catch (NumberFormatException exception)
+            {
+                System.out.println("Enter valid number");
+            }
+        }
 
-        System.out.println("Book was deleted successfully");
     }
 
     public static void findBook()
@@ -167,9 +198,20 @@ public class App
 
     public static void findBookByDate()
     {
-        System.out.println("Enter date of publication in format yyyy-mm-dd");
+        LocalDate date = null;
 
-        LocalDate date = LocalDate.parse(sc.nextLine());
+        while(date == null)
+        {
+            System.out.println("Enter date of publication in format yyyy-mm-dd");
+            try
+            {
+                date = LocalDate.parse(sc.nextLine());
+            }
+            catch(DateTimeParseException exception)
+            {
+                System.out.println("Invalid date format");
+            }
+        }
 
         List<Book> books = BookService.findBookByDate(date);
 

@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.exceptions.InvalidIndexException;
 import org.example.models.Book;
 
 import java.time.LocalDate;
@@ -21,8 +22,9 @@ public class BookService
         books.add(book);
     }
 
-    public static void deleteBook(int index)
+    public static void deleteBook(int index) throws InvalidIndexException
     {
+        if(index < 0 || index >= books.size()) throw new InvalidIndexException("Invalid index");
         books.remove(index);
     }
 
